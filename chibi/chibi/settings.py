@@ -39,6 +39,7 @@ if not hasattr(globals(), 'SECRET_KEY'):
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+SITE_URL = 'http://localhost:8000'
 
 
 # Application definition

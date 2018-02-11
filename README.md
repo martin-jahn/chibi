@@ -33,8 +33,16 @@ Example of authorization header:
 Authorization: Token S2ScvIRPayx7zBIfCV25Mv3Ak1popRBKJZeKMHJzQfR1x0OZ9k
 ```
 
-Payload:
+`slug` is not required. In case `slug` is missing, it is generated automatically.
+
+Request payload:
 ```json
 {"url":"https://skra.cz?utm_source=githoub.com&utm_campaign=chibi-repo", "slug": "github"}
 ```
-Response is the same as request. `slug` is not required. In case `slug` is missing, it is generated automatically.
+
+If `SITE_URL` is not defined in settings then `short_address` is equal to `slug`.
+
+Response:
+```json
+{"url":"https://skra.cz?utm_source=githoub.com&utm_campaign=chibi-repo", "short_address": "http://localhost:8000/github"}
+```
