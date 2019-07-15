@@ -17,7 +17,7 @@ def redirect_view(request, slug):
     return HttpResponsePermanentRedirect(redirect.url)
 
 
-class AlarmSegmentView(AuthorizedAPIView):
+class AddRedirectView(AuthorizedAPIView):
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         serializer = ShortenSerializer(data=request.data)

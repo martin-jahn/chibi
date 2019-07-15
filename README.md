@@ -20,8 +20,9 @@ Run server
 ```bash
 python manage.py runserver
 ```
-Now open you browser on `127.0.0.1:8000/secret/admin/`. This admin url was chosen because 
-`secret/admin` redirects to `secret/admin/` but `admin` to `admin/` doesn't.
+
+Now open you browser on `127.0.0.1:8000/secret/admin/`. This admin url has been chosen because `admin` is misinterpreted
+by Django as a redirect slug and not an admin URL. Since it does not redirect to `admin/` url with slash, `secret/admin/` is used instead. 
 
 ## API
 
