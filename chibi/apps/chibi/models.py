@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import CASCADE, Max
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.urls import reverse
 from django.utils.crypto import get_random_string
 
 
@@ -39,9 +40,8 @@ class Url(models.Model):
         site_url = getattr(settings, 'SITE_URL', '')
         return site_url + self.get_absolute_url()
 
-    @models.permalink
     def get_absolute_url(self):
-        return 'chibi:short_url', (), {'slug': self.slug}
+        return reverse('chibi:short_url', kwargs={'slug': self.slug})
 
     def set_slug(self):
         self.slug_id = (Url.objects.all().aggregate(max_slug_id=Max('slug_id'))['max_slug_id'] or 0) + 1
