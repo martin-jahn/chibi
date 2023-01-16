@@ -86,9 +86,11 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Prague'
+TIME_ZONE = 'Etc/UTC'
 
 USE_I18N = True
 
@@ -100,10 +102,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'chibi/static'),
-)
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 
 TEMPLATES = [
