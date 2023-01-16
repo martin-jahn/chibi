@@ -16,13 +16,13 @@ class UrlManager(models.Manager):
         try:
             url = obj.get_absolute_url()
         except AttributeError:
-            raise NotImplementedError('Object passed to this method need to implement get_absolute_url method')
+            raise NotImplementedError("Object passed to this method need to implement get_absolute_url method")
 
         return self.create(url=url)
 
 
 class Url(models.Model):
-    url = models.URLField(max_length=1000, help_text='Maximum 1000 characters.')
+    url = models.URLField(max_length=1000, help_text="Maximum 1000 characters.")
     slug = models.SlugField(help_text="Maximum 100 characters", blank=True, unique=True, max_length=100)
     slug_id = models.IntegerField(null=True)
 
@@ -31,20 +31,20 @@ class Url(models.Model):
     objects = UrlManager()
 
     class Meta:
-        ordering = ('-id',)
+        ordering = ("-id",)
 
     def __str__(self):
-        return '{}, {}'.format(self.url, self.slug)
+        return "{}, {}".format(self.url, self.slug)
 
     def get_domain_url(self):
-        site_url = getattr(settings, 'SITE_URL', '')
+        site_url = getattr(settings, "SITE_URL", "")
         return site_url + self.get_absolute_url()
 
     def get_absolute_url(self):
-        return reverse('chibi:short_url', kwargs={'slug': self.slug})
+        return reverse("chibi:short_url", kwargs={"slug": self.slug})
 
     def set_slug(self):
-        self.slug_id = (Url.objects.all().aggregate(max_slug_id=Max('slug_id'))['max_slug_id'] or 0) + 1
+        self.slug_id = (Url.objects.all().aggregate(max_slug_id=Max("slug_id"))["max_slug_id"] or 0) + 1
         self.slug = self.get_code()
 
         while Url.objects.filter(slug=self.slug).exists():
@@ -72,7 +72,7 @@ class Url(models.Model):
 # auto update url on first save and save social tags headers if celery is present
 @receiver(pre_save, sender=Url)
 def update_url(*args, **kwargs):
-    instance = kwargs['instance']
+    instance = kwargs["instance"]
 
     if instance.id is None and not instance.slug:
         instance.set_slug()

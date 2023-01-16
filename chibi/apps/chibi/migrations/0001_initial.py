@@ -16,26 +16,26 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ApiToken',
+            name="ApiToken",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('key', models.CharField(default=apps.chibi.models.generate_secret_key, max_length=50, unique=True)),
-                ('date_created', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(max_length=50)),
+                ("key", models.CharField(default=apps.chibi.models.generate_secret_key, max_length=50, unique=True)),
+                ("date_created", models.DateTimeField(auto_now_add=True)),
+                ("user", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
-            name='Url',
+            name="Url",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('url', models.URLField(help_text='Maximum 1000 characters.', max_length=1000)),
-                ('slug', models.SlugField(blank=True, help_text='Maximum 100 characters', max_length=100, unique=True)),
-                ('slug_id', models.IntegerField(null=True)),
-                ('date_created', models.DateTimeField(auto_now_add=True)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("url", models.URLField(help_text="Maximum 1000 characters.", max_length=1000)),
+                ("slug", models.SlugField(blank=True, help_text="Maximum 100 characters", max_length=100, unique=True)),
+                ("slug_id", models.IntegerField(null=True)),
+                ("date_created", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'ordering': ('-id',),
+                "ordering": ("-id",),
             },
         ),
     ]

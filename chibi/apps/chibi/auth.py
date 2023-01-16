@@ -12,4 +12,4 @@ class TokenAuthentication(authentication.TokenAuthentication):
 class AuthorizedAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
-    api_language = 'en'
+    api_language = "en"
