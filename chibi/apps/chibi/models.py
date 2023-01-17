@@ -2,10 +2,11 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import CASCADE, Max
+from django.db.models.functions import Length
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.urls import reverse
-from django.utils.crypto import get_random_string
+from django.utils.crypto import get_random_string, RANDOM_STRING_CHARS
 
 
 class UrlManager(models.Manager):
@@ -24,7 +25,7 @@ class UrlManager(models.Manager):
 class Url(models.Model):
     url = models.URLField(max_length=1000, help_text="Maximum 1000 characters.")
     slug = models.SlugField(help_text="Maximum 100 characters", blank=True, unique=True, max_length=100)
-    slug_id = models.IntegerField(null=True)
+    is_custom_slug = models.BooleanField(default=True)
 
     date_created = models.DateTimeField(auto_now_add=True)
 
@@ -44,29 +45,27 @@ class Url(models.Model):
         return reverse("chibi:short_url", kwargs={"slug": self.slug})
 
     def set_slug(self):
-        self.slug_id = (Url.objects.all().aggregate(max_slug_id=Max("slug_id"))["max_slug_id"] or 0) + 1
-        self.slug = self.get_code()
+        self.is_custom_slug = False
+        length = self.get_slug_length()
+
+        self.slug = get_random_string(length)
 
         while Url.objects.filter(slug=self.slug).exists():
-            self.slug_id += 1
-            self.slug = self.get_code()
+            self.slug = get_random_string(length)
 
-    def get_code(self):
-        string = "1aqzxsw23edcvfr45tgbnhy67ujmki89olp0QAZXRSWEDCVFTGBNHYUJMKIOLP"
-        length = len(string)
-        output = ""
+    def get_slug_length(self, offset=0):
+        slug_length_query = Url.objects.all().annotate(slug_len=Length("slug"))
+        max_slug_length = (slug_length_query.filter(is_custom_slug=False).aggregate(max_slug_length=Max("slug_len")))[
+            "max_slug_length"
+        ] or 1
 
-        if self.id == 0:
-            return string[0]
+        max_slug_length += offset
+        num_urls_longest_slug = slug_length_query.filter(slug_len=max_slug_length).count()
 
-        number = self.slug_id
-        while number != 0:
-            i = number % length
-            number /= length
-            number = int(number)
-            output = string[i] + output
-
-        return output
+        if num_urls_longest_slug < (len(RANDOM_STRING_CHARS) ** max_slug_length) * 0.4:
+            return max_slug_length
+        else:
+            return self.get_slug_length(offset=offset + 1)
 
 
 # auto update url on first save and save social tags headers if celery is present

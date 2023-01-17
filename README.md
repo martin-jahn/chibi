@@ -31,7 +31,7 @@ API token can be created in admin interface.
 
 Example of authorization header:
 ```
-Authorization: Token S2ScvIRPayx7zBIfCV25Mv3Ak1popRBKJZeKMHJzQfR1x0OZ9k
+Authorization: Token <token>
 ```
 
 `slug` is not required. In case `slug` is missing, it is generated automatically.
@@ -40,6 +40,16 @@ Request payload:
 ```json
 {"url":"https://skra.cz?utm_source=githoub.com&utm_campaign=chibi-repo", "slug": "github"}
 ```
+
+Example request:
+```http request
+POST http://localhost:8000/api/shorten/
+Content-Type: application/json
+Authorization: Token <token>
+
+{"url": "https://skra.cz?utm_source=githoub.com&utm_campaign=chibi-repo"}
+```
+
 
 If `SITE_URL` is not defined in settings then `short_address` is equal to `slug`.
 
